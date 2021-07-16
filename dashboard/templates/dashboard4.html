@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<script>
+  function display1(datas){
+      Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Number of Child in SEOUL'
+        },
+        subtitle: {
+            text: 'Source: mois.go.kr'
+        },
+        xAxis: {
+            categories: [
+                '종로구', '중구', '용산구', '성동구', '광진구',
+                '동대문구', '중랑구', '성북구', '강북구', '도봉구',
+                '노원구', '은평구', '서대문구', '마포구', '양천구',
+                '강서구', '구로구', '금천구', '영등포구', '동작구',
+                '관악구', '서초구', '강남구', '송파구', '강동구'
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'count (p)'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: datas
+    });
+  };
+
+  function display2(datas){
+      Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Increase Rate of Population in SEOUL'
+        },
+        subtitle: {
+            text: 'Source: mois.go.kr'
+        },
+        xAxis: {
+            categories: [
+                '종로구', '중구', '용산구', '성동구', '광진구',
+                '동대문구', '중랑구', '성북구', '강북구', '도봉구',
+                '노원구', '은평구', '서대문구', '마포구', '양천구',
+                '강서구', '구로구', '금천구', '영등포구', '동작구',
+                '관악구', '서초구', '강남구', '송파구', '강동구'
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            title: {
+                text: 'count (p)'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: datas
+    });
+  };
+
+  function display3(datas,gu){
+        Highcharts.chart('container', {
+            title: {
+                text: 'Similar GU with '+gu
+            },
+
+            subtitle: {
+                text: 'Source: mois.go.kr'
+            },
+
+            yAxis: {
+                title: {
+                    text: 'Rate of Population'
+                }
+            },
+
+            xAxis: {
+                accessibility: {
+                    rangeDescription: 'Range: 2018 to 2020'
+                }
+            },
+
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                }
+            },
+
+            series: datas,
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+        });
+  };
+
+    function getdata1(){
+        $.ajax({
+                url:'child',
+                datatype:'JSON',
+                success:function(data){
+                    display1(data);
+                },
+                error:function(){}
+        });
+    };
+
+    function getdata2(){
+        $.ajax({
+                url:'pop',
+                datatype:'JSON',
+                success:function(data){
+                    display2(data);
+                },
+                error:function(){}
+            });
+    };
+
+    function getdata3(gu){
+        $.ajax({
+                url:'sim',
+                data:{gu:gu},
+                datatype:'JSON',
+                success:function(data){
+                    display3(data,gu);
+                },
+                error:function(){}
+        });
+    };
+
+  $(document).ready(function(){
+        $('#bt1').click(function(){
+            getdata1();
+        });
+        $('#bt2').click(function(){
+            getdata2();
+        });
+        $('#bt3').click(function(){
+            gu = $('input[name="gu"]').val();
+            getdata3(gu);
+        });
+    });
+</script>
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Dashboard 4</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+
+        <div class="row">
+            <div class="col-xl-6 col-md-4" id="bt1">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">Q1 Card</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-4" id="bt2">
+                <div class="card bg-warning text-white mb-4">
+                    <div class="card-body">Q2 Card</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-4" id="bt3">
+                LOCATION<input type="text" id="gu">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body">Q3 Card</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-area me-1"></i>
+                Area Chart Example
+            </div>
+            <div class="card-body">
+                <div id="container" width="100%" height="30"></div>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+
+
+    </div>
+</main>
